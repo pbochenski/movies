@@ -14,12 +14,8 @@ class NetworkRepo(private val api: ApiService) {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 
-    fun getMovieDetailsById(movieId: Int): Single<Movie> =
-        api.getMovieDetailsById(API_VERSION, movieId, BuildConfig.API_KEY)
-            .withDefaultThreads()
-
-    fun getMovieDiscover(page: Int): Single<MovieDiscoveryResponse> =
-        api.getMovieDiscover(API_VERSION, BuildConfig.API_KEY, page)
+    fun getMovieDiscover(page: Int, year: Int?): Single<MovieDiscoveryResponse> =
+        api.getMovieDiscover(API_VERSION, BuildConfig.API_KEY, page, year= year)
             .withDefaultThreads()
 
     companion object {

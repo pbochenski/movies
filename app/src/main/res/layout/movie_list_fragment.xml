@@ -37,4 +37,10 @@
             app:layout_constraintTop_toTopOf="@+id/movies" app:layout_constraintEnd_toEndOf="@+id/movies"
             app:layout_constraintBottom_toBottomOf="@+id/movies" android:visibility="gone" tools:visibility="visible"
             tools:text="No data loaded"/>
+    <Button
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/button" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/movies"
+            android:background="@drawable/fab_background"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

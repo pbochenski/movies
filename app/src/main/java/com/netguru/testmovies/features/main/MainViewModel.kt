@@ -34,6 +34,11 @@ class MainViewModel(repo: NetworkRepo): ViewModel() {
         disposable.clear()
     }
 
+    fun setYear(newVal: Int?) {
+        dataSourceFactory.setYear(newVal)
+        pagedListData.value?.dataSource?.invalidate()
+    }
+
     companion object {
         const val PAGE_SIZE = 2
     }

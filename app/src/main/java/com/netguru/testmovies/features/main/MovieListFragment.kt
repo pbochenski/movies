@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.netguru.testmovies.R
 import com.netguru.testmovies.common.ViewState
@@ -14,11 +15,11 @@ import com.netguru.testmovies.common.hide
 import com.netguru.testmovies.common.show
 import com.netguru.testmovies.features.detail.MovieFragment
 import kotlinx.android.synthetic.main.movie_list_fragment.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.getViewModel
 
 class MovieListFragment : Fragment() {
 
-    private val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel: MainViewModel by lazy { requireActivity().getViewModel<MainViewModel>() }
     private lateinit var adapter: MovieListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,14 +30,24 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         movies.adapter = adapter
+
+        button.setOnClickListener {
+            val fragment = DatePickerDialog()
+            fragment.show(requireFragmentManager(), "DIALOG")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = MovieListAdapter { movie ->
+        adapter = MovieListAdapter { movie, imageView ->
             findNavController()
-                .navigate(R.id.action_movieListFragment_to_movieFragment, bundleOf(MovieFragment.movie_arg to movie))
+                .navigate(R.id.action_movieListFragment_to_movieFragment,
+                    bundleOf(MovieFragment.movie_arg to movie),
+                    null,
+                    FragmentNavigatorExtras(
+                        imageView to "imageView"
+                    ))
         }
 
         mainViewModel.pagedListData.observe(this, Observer { movies ->

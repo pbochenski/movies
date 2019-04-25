@@ -3,6 +3,7 @@ package com.netguru.testmovies.features.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,8 +12,9 @@ import com.netguru.testmovies.R
 import com.netguru.testmovies.data.Movie
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.movie_item.*
+import kotlinx.android.synthetic.main.movie_item.view.*
 
-class MovieListAdapter(private val onClick: (Movie)->Unit ): PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
+class MovieListAdapter(private val onClick: (Movie, ImageView)->Unit ): PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == 0 ){
             LoadingVH(LayoutInflater.from(parent.context).inflate(
@@ -29,7 +31,7 @@ class MovieListAdapter(private val onClick: (Movie)->Unit ): PagedListAdapter<Mo
         val item = getItem(position)
         if (holder is MovieVH) {
             holder.bind(item!!)
-            holder.itemView.setOnClickListener { onClick(item) }
+            holder.itemView.setOnClickListener { onClick(item, holder.itemView.poster) }
         }
     }
 

@@ -1,7 +1,6 @@
 package com.netguru.testmovies.features.main
 
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.netguru.testmovies.common.ViewState
 import com.netguru.testmovies.data.Movie
@@ -11,8 +10,11 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
-class MovieListDataSource(private val repo: NetworkRepo,
-                          private val disposable: CompositeDisposable): PageKeyedDataSource<Int, Movie>() {
+class MovieListDataSource(
+    private val repo: NetworkRepo,
+    private val disposable: CompositeDisposable,
+    private val year: Int?
+): PageKeyedDataSource<Int, Movie>() {
 
     val state = MutableLiveData<ViewState>()
 
@@ -35,21 +37,21 @@ class MovieListDataSource(private val repo: NetworkRepo,
 
     private fun getPage(page: Int, callback: (List<Movie>) -> Unit) {
         state.postValue(ViewState.LOADING)
-        repo.getMovieDiscover(page)
-            .subscribeBy(
-                onSuccess = {
-                    if(it.movies.isNullOrEmpty()){
-                        state.postValue(ViewState.EMPTY)
-                    } else {
-                        state.postValue(ViewState.DONE)
-                        callback(it.movies)
-                    }
-                },
-                onError = {
-                    state.postValue(ViewState.ERROR(it.message))
-                    Timber.d("getMovieDiscover returned error")
-                })
-            .addTo(disposable)
+            repo.getMovieDiscover(page, year)
+                .subscribeBy(
+                    onSuccess = {
+                        if(it.movies.isNullOrEmpty()){
+                            state.postValue(ViewState.EMPTY)
+                        } else {
+                            state.postValue(ViewState.DONE)
+                            callback(it.movies)
+                        }
+                    },
+                    onError = {
+                        state.postValue(ViewState.ERROR(it.message))
+                        Timber.d("getMovieDiscover returned error")
+                    })
+                .addTo(disposable)
     }
 
     companion object {
