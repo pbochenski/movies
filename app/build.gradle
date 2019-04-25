@@ -12,6 +12,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', "API_KEY", "\"73ef91aeb8d5771821e961d40f25c9d9\""
+        buildConfigField 'String', "PHOTO_PATH", "\"https://image.tmdb.org/t/p/w500/\""
+        buildConfigField 'String', "BASE_URL", "\"https://api.themoviedb.org\""
     }
     buildTypes {
         release {
@@ -35,6 +39,7 @@ dependencies {
     def retrofit_version  = "2.5.0"
     def okHttp_version = "3.14.1"
     def rx_version = "2.2.8"
+    def moshi_version = "1.8.0"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -55,8 +60,11 @@ dependencies {
     implementation "android.arch.paging:runtime:$paging_version"
     implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
 
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
@@ -69,4 +77,7 @@ dependencies {
 
     implementation 'org.koin:koin-android-viewmodel:2.0.0-rc-2'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
 }

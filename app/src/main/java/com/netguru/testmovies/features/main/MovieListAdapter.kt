@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.netguru.testmovies.BuildConfig
 import com.netguru.testmovies.R
 import com.netguru.testmovies.data.Movie
 import kotlinx.android.extensions.LayoutContainer
@@ -29,7 +31,13 @@ class MovieListAdapter: PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.D
             get() = view
 
         fun bind(movie: Movie){
-            title.text = movie.name
+            title.text = movie.title
+            originalTitle.text = movie.originalTitle
+            year.text = movie.releaseDate
+
+            if(movie.posterPath != null){
+                Glide.with(view).load("${BuildConfig.PHOTO_PATH}${movie.posterPath}").into(poster)
+            }
         }
     }
 }
