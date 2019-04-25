@@ -12,7 +12,7 @@ import com.netguru.testmovies.data.Movie
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.movie_item.*
 
-class MovieListAdapter: PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
+class MovieListAdapter(private val onClick: (Movie)->Unit ): PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == 0 ){
             LoadingVH(LayoutInflater.from(parent.context).inflate(
@@ -29,11 +29,16 @@ class MovieListAdapter: PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.D
         val item = getItem(position)
         if (holder is MovieVH) {
             holder.bind(item!!)
+            holder.itemView.setOnClickListener { onClick(item) }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount-1) PROGRESS else ITEM
+    }
+
+    fun hasData(): Boolean {
+        return itemCount != 0
     }
 
     class MovieVH(private val view: View): RecyclerView.ViewHolder(view), LayoutContainer{
