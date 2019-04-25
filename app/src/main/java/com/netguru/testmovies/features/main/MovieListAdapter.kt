@@ -14,9 +14,15 @@ import kotlinx.android.synthetic.main.movie_item.*
 
 class MovieListAdapter: PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MovieVH(LayoutInflater.from(parent.context).inflate(
-            R.layout.movie_item, parent, false
-        ))
+        return if(viewType == 0 ){
+            LoadingVH(LayoutInflater.from(parent.context).inflate(
+                R.layout.progress_item, parent, false
+            ))
+        } else {
+            MovieVH(LayoutInflater.from(parent.context).inflate(
+                R.layout.movie_item, parent, false
+            ))
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -24,6 +30,10 @@ class MovieListAdapter: PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.D
         if (holder is MovieVH) {
             holder.bind(item!!)
         }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount-1) PROGRESS else ITEM
     }
 
     class MovieVH(private val view: View): RecyclerView.ViewHolder(view), LayoutContainer{
@@ -39,5 +49,12 @@ class MovieListAdapter: PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.D
                 Glide.with(view).load("${BuildConfig.PHOTO_PATH}${movie.posterPath}").into(poster)
             }
         }
+    }
+
+    class LoadingVH(private val view: View): RecyclerView.ViewHolder(view)
+
+    companion object {
+        const val PROGRESS = 0
+        const val ITEM = 1
     }
 }

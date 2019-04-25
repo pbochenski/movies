@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Test Movies</string>
+    <string name="empty">No movies found</string>
+    <string name="error">Error occured (%s)</string>
 </resources>
